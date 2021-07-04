@@ -1,11 +1,11 @@
 import os
 from typing import Optional
 
-import requests
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.params import Depends
+from httpx import AsyncClient
 from pydantic import BaseModel
 from starlette.requests import Request
 from starlette.staticfiles import StaticFiles
@@ -39,7 +39,7 @@ class Location(BaseModel):
     country: str = "US"
 
 
-def get_report(
+async def get_report(
     city: str,
     country: str,
     state: Optional[str] = None,
@@ -52,8 +52,9 @@ def get_report(
 
     url = f"https://api.openweathermap.org/data/2.5/weather?q={q}&appid={OPENWEATHERMAPS_API_KEY}&units={units}"
 
-    response = requests.get(url)
-    response.raise_for_status()
+    async with AsyncClient() as client:
+        response = await client.get(url)
+        response.raise_for_status()
 
     data = response.json()
     forecast = data["main"]
@@ -62,8 +63,8 @@ def get_report(
 
 
 @app.get("/api/weather")
-def weather(location: Location = Depends(), units: Optional[str] = "metric"):
-    report = get_report(**location.dict(), units=units)
+async def weather(location: Location = Depends(), units: Optional[str] = "metric"):
+    report = await get_report(**location.dict(), units=units)
     return report
 
 
