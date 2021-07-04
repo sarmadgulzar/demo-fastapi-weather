@@ -1,3 +1,4 @@
+from typing import Optional
 import uvicorn
 from fastapi import FastAPI
 from starlette.requests import Request
@@ -20,6 +21,21 @@ def index(request: Request):
             "message": message,
         },
     )
+
+
+@app.get("/api/weather")
+def weather(
+    city: str,
+    state: Optional[str] = None,
+    country: str = "US",
+    units: Optional[str] = "metric",
+):
+    return {
+        "city": city,
+        "state": state,
+        "country": country,
+        "units": units,
+    }
 
 
 if __name__ == "__main__":
