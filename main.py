@@ -26,10 +26,7 @@ def index(request: Request):
 
     return templates.TemplateResponse(
         name="index.html",
-        context={
-            "request": request,
-            "message": message,
-        },
+        context={"request": request},
     )
 
 

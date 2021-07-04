@@ -1,4 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<p>{{ message }}</p>
+<div class="container">
+    {% include "navbar.html" %}
+    <h1 class="mt-5 text-center">A demo app using <a href="https://fastapi.tiangolo.com/">FastAPI</a></h1>
+    <p class="text-center lead">which uses <a href="https://openweathermap.org/">Open Weather Maps</a> to give you weather information about cities around the world!</p>
+    <h2>API Endpoints</h2>
+    <ul>
+        <li>
+            <h4>Get Weather</h4>
+            <p><strong>Method:</strong> <code>GET</code></p>
+            <p><strong>Endpoint:</strong> <a href="/api/weather?city=San+Francisco">/api/weather?city=San+Francisco</a></p>
+        </li>
+    </ul>
+</div>
 {% endblock content %}
