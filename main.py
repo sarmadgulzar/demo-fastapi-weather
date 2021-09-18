@@ -4,6 +4,7 @@ from typing import Optional
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.params import Depends
 from httpx import AsyncClient
 from pydantic import BaseModel
@@ -19,6 +20,22 @@ app = FastAPI()
 templates = Jinja2Templates("templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# CORS
+origins = [
+    "https://zg9oso.deta.dev/",
+    "http://localhost",
+    "http://localhost:8080",
+    "http://127.0.0.1",
+    "http://127.0.0.1:8080",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def index(request: Request):
