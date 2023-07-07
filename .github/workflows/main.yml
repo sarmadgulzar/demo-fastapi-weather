@@ -5,7 +5,13 @@ jobs:
   push-to-space:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get short SHA
+        id: short-sha
+        run: echo "::set-output name=sha::$(git rev-parse --short ${{ github.sha }})"
+
       - name: Deta Space Deployment Github Action
         uses: neobrains/space-deployment-github-action@v0.5
         with:
@@ -14,3 +20,4 @@ jobs:
           space_push: true
           space_release: true
           list_on_discovery: true
+          release_version: ${{ steps.short-sha.outputs.sha }}
