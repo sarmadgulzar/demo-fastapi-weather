@@ -1,0 +1,12 @@
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: fastapi-weather
+    src: .
+    engine: python3.9
+    primary: true
+    presets:
+      env:
+        - name: OPENWEATHERMAPS_API_KEY
+          description: Openweather Maps API Key from https://openweathermap.org
+          default: ""

@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Optional
 
@@ -11,6 +12,8 @@ from pydantic import BaseModel
 from starlette.requests import Request
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -36,6 +39,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get("/")
 def index(request: Request):
@@ -68,7 +72,8 @@ async def get_report(
 
     async with AsyncClient() as client:
         response = await client.get(url)
-        response.raise_for_status()
+        if response.is_error:
+            logger.error(response.content)
 
     data = response.json()
     forecast = data["main"]
